@@ -144,6 +144,9 @@ CSP_DEFAULT_SRC = ("'self'",)
 CSP_SCRIPT_SRC = ("'self'", 'https://trustedscriptsource.com')
 CSP_STYLE_SRC = ("'self'", 'https://trustedstylesource.com')
 
+# Ensure that Django is aware of requests being forwarded as HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # Redirect HTTP to HTTPS
 SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
 
