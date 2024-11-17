@@ -2,10 +2,9 @@ from django import forms  # Add this import
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager, Permission
 
-class Book(models.Model):
-    # Existing fields...
-    title = models.CharField(max_length=200)
-    author = models.CharField(max_length=100)
+class Book(models.Model): 
+    title = models.CharField(max_length=200) 
+    author = models.CharField(max_length=100) 
     publication_year = models.IntegerField()
     isbn = models.CharField(max_length=13)
     cover_image = models.ImageField(upload_to='books/covers/')
