@@ -1,0 +1,5 @@
+<!-- form_example.html -->
+<form method="post" action="{% url 'submit_view' %}">
+    {% csrf_token %}
+    <!-- form fields here -->
+</form>
