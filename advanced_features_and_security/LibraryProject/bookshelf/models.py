@@ -1,17 +1,28 @@
+from django import forms  # Add this import
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager, Permission
 
-# Create your models here.
-
-class Book(models.Model): 
-    title = models.CharField(max_length=200) 
-    author = models.CharField(max_length=100) 
+class Book(models.Model):
+    # Existing fields...
+    title = models.CharField(max_length=200)
+    author = models.CharField(max_length=100)
     publication_year = models.IntegerField()
+    isbn = models.CharField(max_length=13)
+    cover_image = models.ImageField(upload_to='books/covers/')
+    description = models.TextField()
+
+    class Meta:
+        permissions = [
+            ("can_view", "Can view book"),
+            ("can_create", "Can create book"),
+            ("can_edit", "Can edit book"),
+            ("can_delete", "Can delete book"),
+        ]
 
     def __str__(self):
         return f"{self.title} by {self.author}"
-    
 
+# The Custom User Manager and Custom User Model as is from your code
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, date_of_birth, password=None, **extra_fields):
         if not email:
