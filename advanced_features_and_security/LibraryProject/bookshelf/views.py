@@ -2,6 +2,19 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import permission_required
 from .models import Book
 from .forms import BookForm
+from django.db.models import Q
+
+
+def search_books(request):
+    query = request.GET.get('q')
+    if query:
+        # Using ORM and Q objects for safe query building
+        results = Book.objects.filter(
+            Q(title__icontains=query) | Q(author__icontains=query)
+        )
+    else:
+        results = Book.objects.all()
+    return render(request, 'bookshelf/book_list.html', {'results': results})
 
 @permission_required('books.can_view', raise_exception=True)
 def view_books(request):
