@@ -102,7 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # settings.py
-AUTH_USER_MODEL = 'your_app_name.CustomUser'
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 
 # Internationalization
