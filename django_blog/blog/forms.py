@@ -3,15 +3,12 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.db import models
 from .models import Comment, Post, Tag
+from taggit.forms import TagWidget
 
 
 
 class PostForm(forms.ModelForm):
-    tags = forms.ModelMultipleChoiceField(
-        queryset=Tag.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=False
-    )
+    tags = forms.CharField(widget=TagWidget())
 
     class Meta:
         model = Post
