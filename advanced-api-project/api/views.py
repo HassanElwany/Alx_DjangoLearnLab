@@ -1,20 +1,37 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 from .models import Book
 from .serializers import BookSerializer
 
+
 class BookListView(generics.ListAPIView):
-    """Retrieve all books"""
+    """Retrieve all books with filtering, searching, and ordering capabilities."""
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    # Add filtering, searching, and ordering capabilities
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+
+    # Specify fields for filtering
+    filterset_fields = ['title', 'author__name', 'publication_year']
+
+    # Specify fields for search functionality
+    search_fields = ['title', 'author__name']
+
+    # Specify fields for ordering
+    ordering_fields = ['title', 'publication_year']
+    ordering = ['title']  # Default ordering by title
 
     def get_queryset(self):
-        """Filter books based on query parameters (if needed)"""
+        """Customize the queryset if additional logic is required."""
         queryset = super().get_queryset()
-        # Example: Uncomment to filter books by current year
-        # current_year = datetime.datetime.now().year
-        # return queryset.filter(publication_year=current_year)
+        # Add any dynamic filtering or adjustments to the queryset here if needed
         return queryset
+
+
 
 
 class BookDetailView(generics.RetrieveAPIView):

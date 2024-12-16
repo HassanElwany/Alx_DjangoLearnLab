@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 django-csp = "*"
 djangorestframework = "*"
+django-filter = "*"
 
 [dev-packages]
 
