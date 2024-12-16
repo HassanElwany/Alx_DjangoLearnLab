@@ -2,8 +2,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
-from .models import Profile, Post, Comment
-from .forms import ProfileUpdateForm, CustomUserCreationForm, CommentForm
+from .models import Profile, Post, Comment, Tag
+from .forms import ProfileUpdateForm, CustomUserCreationForm, CommentForm, PostForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import Q
@@ -29,7 +29,7 @@ class PostDetailView(DetailView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['title', 'content']
+    form_class = PostForm
     template_name = "blog/post_form.html"
     success_url = reverse_lazy("post_list")
 
@@ -40,18 +40,32 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title', 'content']
+    form_class = PostForm
     template_name = "blog/post_form.html"
     success_url = reverse_lazy("post_list")
 
     def test_func(self):
-        """Ensure only the author can update the post."""
         post = self.get_object()
         return post.author == self.request.user
 
     def handle_no_permission(self):
         messages.error(self.request, "You are not authorized to edit this post.")
         return super().handle_no_permission()
+
+
+class TagPostListView(ListView):
+    model = Post
+    template_name = "blog/tag_posts.html"
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        tag = get_object_or_404(Tag, name=self.kwargs.get('tag_name'))
+        return Post.objects.filter(tags=tag)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = self.kwargs.get('tag_name')
+        return context
 
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -132,6 +146,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         return redirect('post_detail', pk=self.kwargs['post_id'])  # Redirect to the post detail page
     
 
+# Update the search view
 def search(request):
     query = request.GET.get('q', '')
     if query:
@@ -141,5 +156,5 @@ def search(request):
             Q(tags__name__icontains=query)
         ).distinct()
     else:
-        posts = Post.objects.none()  # No posts if no query is entered
+        posts = Post.objects.none()
     return render(request, 'blog/search_results.html', {'posts': posts, 'query': query})
