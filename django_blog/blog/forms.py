@@ -2,8 +2,16 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.db import models
-from .models import Comment
+from .models import Comment, Post, Tag
 
+
+
+class PostForm(forms.ModelForm):
+    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), widget=forms.CheckboxSelectMultiple, required=False)
+
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'tags']
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
