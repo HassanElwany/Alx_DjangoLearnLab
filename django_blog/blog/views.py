@@ -114,3 +114,17 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('post_detail', kwargs={'pk': self.object.post.pk})
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = 'blog/comment_confirm_delete.html'
+
+    def get_success_url(self):
+        post = self.object.post  # Get the related post
+        messages.success(self.request, "Your comment has been deleted.")
+        return redirect('post_detail', pk=post.pk)
+
+    def test_func(self):
+        """Ensure only the comment author can delete the comment."""
+        comment = self.get_object()
+        return comment.author == self.request.user
