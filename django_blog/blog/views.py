@@ -53,7 +53,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return super().handle_no_permission()
 
 
-class TagPostListView(ListView):
+class PostByTagListView(ListView):
     model = Post
     template_name = "blog/tag_posts.html"
     context_object_name = "posts"
