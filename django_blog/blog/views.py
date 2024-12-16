@@ -1,8 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib import messages
 from .models import Profile, Post
 from .forms import ProfileUpdateForm, CustomUserCreationForm
+
 from django.contrib import messages
 
 
