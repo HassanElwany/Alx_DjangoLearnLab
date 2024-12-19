@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import CustomUser
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
+import rest_framework.permissions.IsAuthenticated
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer, FollowSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
@@ -14,7 +14,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class FollowUserView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [rest_framework.permissions.IsAuthenticated]
     queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):
@@ -23,7 +23,7 @@ class FollowUserView(generics.GenericAPIView):
         return Response({"message": f"You are now following {user_to_follow.username}"})
 
 class UnfollowUserView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [rest_framework.permissions.IsAuthenticated]
     queryset = CustomUser.objects.all()
 
     def post(self, request, user_id):
