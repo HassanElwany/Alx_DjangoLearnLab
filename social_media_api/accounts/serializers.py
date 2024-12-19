@@ -5,6 +5,12 @@ from django.contrib.auth import get_user_model
 # Get the custom user model
 User = get_user_model()
 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'bio', 'profile_picture']
+
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
