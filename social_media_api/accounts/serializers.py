@@ -32,3 +32,8 @@ class LoginSerializer(serializers.Serializer):
         if user and user.check_password(data['password']):
             return user
         raise serializers.ValidationError("Invalid credentials")
+
+class FollowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'bio', 'profile_picture']
