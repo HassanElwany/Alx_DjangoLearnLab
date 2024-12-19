@@ -9,6 +9,9 @@ djangorestframework = "*"
 django-filter = "*"
 psycopg = "*"
 psycopg2-binary = "*"
+django = "*"
+djangorestframework-simplejwt = "*"
+pillow = "*"
 
 [dev-packages]
 
