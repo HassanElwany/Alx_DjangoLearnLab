@@ -1,13 +1,13 @@
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import permissions
 from rest_framework import viewsets
 from .models import Post, Comment  
 from .serializers import PostSerializer, CommentSerializer
 
 class FeedView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
         following_users = request.user.following.all()
@@ -16,7 +16,7 @@ class FeedView(APIView):
         return Response(serializer.data)
 
 class PostViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
